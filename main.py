@@ -15,27 +15,64 @@ def invert_line(img):
 def set_bit(value, bit):
     return value | (1<<bit)
 
+def bytesToBinary(mBytes):
+    fullBin = ""
+    for byte in mBytes:
+        fullBin += bin(byte)[2:]
+    return fullBin
+
+def bytesToString(bytes):
+    msg = ""
+    for nb in bytes:
+        msg += chr(nb)
+    return msg
+
+
 def hideMessage(img, message):
     mBytes = bytearray(message, "ascii")
+    print(mBytes[0])
     pixels = img.load()
 
-    for x in range(0, len(mBytes)):
-        r, g, b = pixels[x,0]
-        r = r << mBytes[x]
-        r = set_bit(r, ) # ????
-        
-        # g = mBytes[x]
-        # b = mBytes[x]
-        pixels[x, 0] = r, g, b
+    print(f"img width  : {img.width}")
+    print(f"img height : {img.height}")
 
-    
+    msgBin = bytesToBinary(mBytes)
+    print(f"msgBin : {msgBin} | length = {len(msgBin)}")
 
+    for y in range(0, img.height):
+        for x in range(0, img.width):
+            if (x + (x*y) < len(mBytes)):
+                r, g, b = pixels[x,y]
+                r = r ^ int(mBytes[x + (x*y)])
+                # r = r ^ int(msgBin[x + (x*y)])
+                pixels[x, y] = r, g, b
+            else:
+                return
+
+def findMessage(img, msg_length):
+    pixels = img.load()
+    max_x = img.width if msg_length > img.width else msg_length
+    max_y = int(msg_length / img.width) + 1
+
+    mBytes = []
+
+    for y in range(max_y):
+        for x in range(max_x):
+            r, g, b = pixels[x,y]
+            mBytes.append(r ^ 255)
+
+    msg = bytesToString(mBytes)
+    return msg
 
 def main(filename, output, message):
+    # Hide message in picture
     img = Image.open(filename)  # ouverture de l'image contenue dans un fichier
-    # invert_line(img)
     hideMessage(img, message)
     img.save(output)            # sauvegarde de l'image obtenue dans un autre fichier
+
+    # Find message in picture
+    img = Image.open(output)
+    print(findMessage(img, len(message)))
 
 
 if __name__ == "__main__":
