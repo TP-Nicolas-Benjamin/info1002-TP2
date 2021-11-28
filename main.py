@@ -1,6 +1,8 @@
 from PIL import Image
 from Crypto.PublicKey import RSA
 
+TAILLE = 16
+
 def invert_line(img):
     m = img.height // 2             # milieu de l'image
     pixels = img.load()             # tableau des pixels
@@ -32,63 +34,76 @@ def hideMessage(img, message):
     mBytes = bytearray(message, "ascii")
     pixels = img.load()
 
-    print(mBytes)
+    byteLength = (len(message)).to_bytes(16, byteorder='big')
 
-    byteLength = (len(message)*2).to_bytes(16, byteorder='big')
-    print(byteLength)
-    print(byteLength[15])
+    min_x = TAILLE % img.width
+    min_y = (TAILLE // img.width) % img.height
 
-    print(f"message length : {len(mBytes)}")
-    print(f"img width  : {img.width}")
-    print(f"img height : {img.height}")
+    # On cache la longueur du message sur les 16 premiers octets
+    for i in range(TAILLE):
+        x = i % img.width
+        y = (i // img.width) % img.height
+        r,_,_ = pixels[x,y]
+        r = r ^ byteLength[x + (x*y)]
+        pixels[x,y] = r,_,_
 
-    for y in range(0, img.height):
-        for x in range(0, img.width):
-            if(x + (x*y) < len(byteLength)):
-                r, g, b = pixels[x,y]
-                g = g ^ byteLength[x + (x*y)]
-                pixels[x, y] = r, g, b
-            else:
-                return
+    # On cache ensuite le message à la suite de sa taille
+    for i in range(len(message)):
+        x = (min_x + i) % img.width
+        y = (min_y + ((min_x + i) // img.width)) % img.height
+        print(f"x : {x}, y : {y}")
+        print(f"pixels : {pixels[x,y]}")
+        r,_,_ = pixels[x,y]
+        r = r ^ mBytes[x + (x*y) - TAILLE]
+        pixels[x,y] = r,_,_
 
-    for y in range(0, img.height):
-        for x in range(0, img.width):
-            if (x + (x*y) < len(mBytes)):
-                r, g, b = pixels[x,y]
-                r = r ^ int(mBytes[x + (x*y)])
-                pixels[x, y] = r, g, b
-            else:
-                return
+def findMessageLength(img):
+    pixels = img.load()
+
+    mLengthBytes = []
+
+    # On récupère la taille du message sur les 16 premiers bytes
+    for i in range(TAILLE):
+        x = i % img.width
+        y = (i // img.width) % img.height
+        r,_,_ = pixels[x,y]
+        mLengthBytes.append(r ^ 255)
+
+    return int.from_bytes(mLengthBytes, "big")
 
 def findMessage(img, msg_length):
     pixels = img.load()
-    max_x = img.width if msg_length > img.width else msg_length
-    max_y = int(msg_length / img.width) + 1
 
     mBytes = []
 
-    for y in range(max_y):
-        for x in range(max_x):
-            r, g, b = pixels[x,y]
-            mBytes.append(r ^ 255)
-            print(mBytes)
+    min_x = TAILLE % img.width
+    min_y = (TAILLE // img.width) % img.height
+
+    # On récupère le message
+    for i in range(msg_length):
+        x = (min_x + i) % img.width
+        y = (min_y + ((min_x + i) // img.width)) % img.height
+        r,_,_ = pixels[x,y]
+        mBytes.append(r ^ 255)
 
     msg = bytesToString(mBytes)
     return msg
 
-def genSigningKey():
-    keyPair = RSA.generate(bits=2048)
-    print("https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples")
+# def genSigningKey():
+#     keyPair = RSA.generate(bits=2048)
+#     print("https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples")
 
 def main(filename, output, message):
     # Hide message in picture
     img = Image.open(filename)  # ouverture de l'image contenue dans un fichier
     hideMessage(img, message)
-    # img.save(output)            # sauvegarde de l'image obtenue dans un autre fichier
+    img.save(output)            # sauvegarde de l'image obtenue dans un autre fichier
 
     # Find message in picture
-    # img = Image.open(output)
-    # print(findMessage(img, len(message) + 100))
+    img = Image.open(output)
+    msgLength = findMessageLength(img)
+    print(f"msgLength : {msgLength}")
+    print(findMessage(img, msgLength))
 
 
 if __name__ == "__main__":
