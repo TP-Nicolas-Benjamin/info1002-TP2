@@ -1,5 +1,12 @@
 from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+
 from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA512
+from Crypto.Signature import PKCS1_v1_5
+
+import sys
 
 TAILLE = 16
 
@@ -89,25 +96,88 @@ def findMessage(img, msg_length):
     msg = bytesToString(mBytes)
     return msg
 
-# def genSigningKey():
-#     keyPair = RSA.generate(bits=2048)
-#     print("https://cryptobook.nakov.com/digital-signatures/rsa-sign-verify-examples")
+def generate_pair_key():
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    out = open("private.key", "wb")
+    out.write(private_key)
+    out.close()
 
+    public_key = key.publickey().export_key()
+    out = open("public.key", "wb")
+    out.write(public_key)
+    out.close()
+    
+    
+def sign_certificate(filename):
+    
+    f = open(f"certificate/{filename}", "rb")
+    message = f.read()
+    f.close()
+
+    key_file = open("private.key", "r")
+    private_key = RSA.importKey(key_file.read())
+    f.close()
+
+    signer = PKCS1_v1_5.new(private_key)
+    digest = SHA512.new()
+    digest.update(message)
+    sig = signer.sign(digest)
+
+    f = open(f'sign/{filename}.sig', "wb")
+    f.write(sig)
+    f.close()
+
+
+def validate_certificate(filename):
+    
+    f = open(f'certificate/{filename}.png', "rb")
+    data = f.read()
+    f.close()
+
+    img = Image.open("certificate/"+filename + ".png") 
+
+    name = findMessage(img, 256,1)
+    firstname = findMessage(img, 256,2)
+    
+    digest = SHA512.new()
+    digest.update(data)
+
+    f = open(f'sign/{name}_{firstname}.png.sig', "rb")
+    sign = f.read()
+    f.close()
+    
+    public_key_file = open("public.key", "r")
+    public_key = RSA.importKey(public_key_file.read())
+    verifier = PKCS1_v1_5.new(public_key)
+    
+    return verifier.verify(digest, sign)
+   
+def generate_certificate(name, firstname, score):
+    
+    def text(img, text, x, y, text_size, font="arial", fill=(0,0,0)):
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype(f'fonts/{font}.ttf', text_size)  
+        draw.text((x, y), text, fill, font)  
+
+    img = Image.open(f'diplome-BG.png')
+    
+    text(img, 'UNSC', 1020, 400, 60, fill=(0,0,255))
+    
+    text(img, f'Spartan', 1000, 600, 60, fill=(0,128,0))
+    
+    text(img, f"{name.upper()} {firstname.upper()} a réussi la formation de l'UNSC", 600, 800, 60, fill=(0,0,0))
+    
+    text(img, f'avec une moyenne de {score}', 800, 1000, 60, fill=(0,0,0))
+    
+    img.save(f'certificate/{name.upper()}_{firstname.upper()}.png')
+    sign_certificate(f'{name.upper()}_{firstname.upper()}.png')
+    
+    
 def main(filename, output, message):
-    # Hide message in picture
-    img = Image.open(filename)  # ouverture de l'image contenue dans un fichier
-    hideMessage(img, message)
-    img.save(output)            # sauvegarde de l'image obtenue dans un autre fichier
-
-    # Find message in picture
-    img = Image.open(output)
-    msgLength = findMessageLength(img)
-    print(f"msgLength : {msgLength}")
-    print(findMessage(img, msgLength))
-
+    validate_certificate("117_JOHN")
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) != 3:
         print("usage: {} image output".format(sys.argv[0]))
     main(sys.argv[1], sys.argv[2], sys.argv[3])
