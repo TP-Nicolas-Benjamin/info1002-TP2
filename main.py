@@ -30,32 +30,39 @@ def bytesToString(bytes):
         msg += chr(nb)
     return msg
 
-def hideMessage(img, message):
+def hideMessage(img, message, y_index):
     mBytes = bytearray(message, "ascii")
     pixels = img.load()
 
-    byteLength = (len(message)).to_bytes(16, byteorder='big')
-
-    min_x = TAILLE % img.width
-    min_y = (TAILLE // img.width) % img.height
-
-    # On cache la longueur du message sur les 16 premiers octets
-    for i in range(TAILLE):
-        x = i % img.width
-        y = (i // img.width) % img.height
-        r,_,_ = pixels[x,y]
-        r = r ^ byteLength[x + (x*y)]
-        pixels[x,y] = r,_,_
-
-    # On cache ensuite le message à la suite de sa taille
     for i in range(len(message)):
-        x = (min_x + i) % img.width
-        y = (min_y + ((min_x + i) // img.width)) % img.height
-        print(f"x : {x}, y : {y}")
-        print(f"pixels : {pixels[x,y]}")
-        r,_,_ = pixels[x,y]
-        r = r ^ mBytes[x + (x*y) - TAILLE]
-        pixels[x,y] = r,_,_
+        r,_,_ = pixels[i,y_index]
+        r = r ^ mBytes[i]
+        pixels[i,y_index] = r,_,_
+
+    # # Ancienne façon de faire : on écrit la taille du message sur 16 octets puis le message lui-même
+    # byteLength = (len(message)).to_bytes(16, byteorder='big')
+
+    # min_x = TAILLE % img.width
+    # min_y = (TAILLE // img.width) % img.height
+
+    # # On cache la longueur du message sur les 16 premiers octets
+    # for i in range(TAILLE):
+    #     x = i % img.width
+    #     y = (i // img.width) % img.height
+    #     r,_,_ = pixels[x,y]
+    #     r = r ^ byteLength[x + (x*y)]
+    #     pixels[x,y] = r,_,_
+
+    # # On cache ensuite le message à la suite de sa taille
+    # for i in range(len(message)):
+    #     x = (min_x + i) % img.width
+    #     y = (min_y + ((min_x + i) // img.width)) % img.height
+    #     print(f"x : {x}, y : {y}")
+    #     print(f"pixels : {pixels[x,y]}")
+    #     r,_,_ = pixels[x,y]
+    #     r = r ^ mBytes[x + (x*y) - TAILLE]
+    #     pixels[x,y] = r,_,_
+
 
 def findMessageLength(img):
     pixels = img.load()
@@ -71,20 +78,24 @@ def findMessageLength(img):
 
     return int.from_bytes(mLengthBytes, "big")
 
-def findMessage(img, msg_length):
+def findMessage(img, msg_length, y_index, x_max):
     pixels = img.load()
 
     mBytes = []
 
-    min_x = TAILLE % img.width
-    min_y = (TAILLE // img.width) % img.height
-
-    # On récupère le message
-    for i in range(msg_length):
-        x = (min_x + i) % img.width
-        y = (min_y + ((min_x + i) // img.width)) % img.height
-        r,_,_ = pixels[x,y]
+    for i in range(x_max):
+        r,_,_ = pixels[i,y_index]
         mBytes.append(r ^ 255)
+
+    # min_x = TAILLE % img.width
+    # min_y = (TAILLE // img.width) % img.height
+
+    # # On récupère le message
+    # for i in range(msg_length):
+    #     x = (min_x + i) % img.width
+    #     y = (min_y + ((min_x + i) // img.width)) % img.height
+    #     r,_,_ = pixels[x,y]
+    #     mBytes.append(r ^ 255)
 
     msg = bytesToString(mBytes)
     return msg
@@ -96,14 +107,24 @@ def findMessage(img, msg_length):
 def main(filename, output, message):
     # Hide message in picture
     img = Image.open(filename)  # ouverture de l'image contenue dans un fichier
-    hideMessage(img, message)
+    hideMessage(img, message, 0)
+    hideMessage(img, message+message, 3)
     img.save(output)            # sauvegarde de l'image obtenue dans un autre fichier
 
     # Find message in picture
     img = Image.open(output)
-    msgLength = findMessageLength(img)
-    print(f"msgLength : {msgLength}")
-    print(findMessage(img, msgLength))
+    print(findMessage(img, 0, 0, len(message)))
+    print(findMessage(img, 0, 3, len(message+message)))
+
+    # # Ancienne version
+    # Hide message in picture
+    # img = Image.open(filename)  # ouverture de l'image contenue dans un fichier
+    # hideMessage(img, message, 0)
+    # img.save(output)            # sauvegarde de l'image obtenue dans un autre fichier
+    # # Find message in picture
+    # msgLength = findMessageLength(img)
+    # print(f"msgLength : {msgLength}")
+    # print(findMessage(img, msgLength))
 
 
 if __name__ == "__main__":
