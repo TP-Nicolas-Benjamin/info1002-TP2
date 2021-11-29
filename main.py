@@ -8,8 +8,6 @@ from Crypto.Signature import PKCS1_v1_5
 
 import sys
 
-TAILLE = 16
-
 def invert_line(img):
     m = img.height // 2             # milieu de l'image
     pixels = img.load()             # tableau des pixels
@@ -37,64 +35,68 @@ def bytesToString(bytes):
         msg += chr(nb)
     return msg
 
-def hideMessage(img, message):
-    mBytes = bytearray(message, "ascii")
+# Transoform a int into a list of 8 bits
+def bitfield(n):
+    return [1 if digit=='1' else 0 for digit in bin(n)[2:]]
+
+# Transform a list of 8 bits into a int
+def bits_to_int(bitlist):
+    out = 0
+    for bit in bitlist:
+        out = (out << 1) | bit
+    return out
+
+# Take a byte_array of size 2048 into 256 byte and write it into the picture 
+def hideMessage(img: Image.Image, m_bytes: bytearray, start_y: int):
+    
+    byte_list = list()
+    pixels = img.load()
+    
+    for i in range(len(mBytes)):
+        byte_list += bitfield(mBytes[i])
+    
+    for i in range(len(byte_list)//4):
+        x = i  
+        y = start_y
+        r,_,_ = pixels[x,y]
+        
+        r = 0000 >> r
+        r = r << byte_list[i*4]
+        r = r << byte_list[i*4 + 1]    
+        r = r << byte_list[i*4 + 2]    
+        r = r << byte_list[i*4 + 3]    
+
+
+def findMessage(img: Image.Image, start_y:int):
+    
+    message = list()
+    
     pixels = img.load()
 
-    byteLength = (len(message)).to_bytes(16, byteorder='big')
-
-    min_x = TAILLE % img.width
-    min_y = (TAILLE // img.width) % img.height
-
-    # On cache la longueur du message sur les 16 premiers octets
-    for i in range(TAILLE):
-        x = i % img.width
-        y = (i // img.width) % img.height
-        r,_,_ = pixels[x,y]
-        r = r ^ byteLength[x + (x*y)]
-        pixels[x,y] = r,_,_
-
-    # On cache ensuite le message à la suite de sa taille
-    for i in range(len(message)):
-        x = (min_x + i) % img.width
-        y = (min_y + ((min_x + i) // img.width)) % img.height
-        print(f"x : {x}, y : {y}")
-        print(f"pixels : {pixels[x,y]}")
-        r,_,_ = pixels[x,y]
-        r = r ^ mBytes[x + (x*y) - TAILLE]
-        pixels[x,y] = r,_,_
-
-def findMessageLength(img):
-    pixels = img.load()
-
-    mLengthBytes = []
-
-    # On récupère la taille du message sur les 16 premiers bytes
-    for i in range(TAILLE):
-        x = i % img.width
-        y = (i // img.width) % img.height
-        r,_,_ = pixels[x,y]
-        mLengthBytes.append(r ^ 255)
-
-    return int.from_bytes(mLengthBytes, "big")
-
-def findMessage(img, msg_length):
-    pixels = img.load()
-
-    mBytes = []
-
-    min_x = TAILLE % img.width
-    min_y = (TAILLE // img.width) % img.height
+    m_bytes = []
 
     # On récupère le message
-    for i in range(msg_length):
-        x = (min_x + i) % img.width
-        y = (min_y + ((min_x + i) // img.width)) % img.height
+    for i in range(0, 512, 4):
+        x = i
+        y = start_y
         r,_,_ = pixels[x,y]
-        mBytes.append(r ^ 255)
+        bit = r & 0b1
+        m_bytes.append(bit)
+        r = r >> 1
+        bit = r & 0b1
+        m_bytes.append(bit)
+        bit = r & 0b1
+        m_bytes.append(bit)
+        r = r >> 1
+        bit = r & 0b1
+        m_bytes.append(bit)
+    
+    # Split m_bytes into array of 8 bits
+    for i in range(0, len(m_bytes)//8, step=8):
+        message.append(bits_to_int(m_bytes[i:i+8]))
 
-    msg = bytesToString(mBytes)
-    return msg
+    return message
+
 
 def generate_pair_key():
     key = RSA.generate(2048)
@@ -137,8 +139,8 @@ def validate_certificate(filename):
 
     img = Image.open("certificate/"+filename + ".png") 
 
-    name = findMessage(img, 256,1)
-    firstname = findMessage(img, 256,2)
+    name = findMessage(img,1)
+    firstname = findMessage(img,2)
     
     digest = SHA512.new()
     digest.update(data)
@@ -153,7 +155,7 @@ def validate_certificate(filename):
     
     return verifier.verify(digest, sign)
    
-def generate_certificate(name, firstname, score):
+def generate_certificate(name: str, firstname: str, score: int):
     
     def text(img, text, x, y, text_size, font="arial", fill=(0,0,0)):
         draw = ImageDraw.Draw(img)
@@ -170,11 +172,18 @@ def generate_certificate(name, firstname, score):
     
     text(img, f'avec une moyenne de {score}', 800, 1000, 60, fill=(0,0,0))
     
+    recipient_key = RSA.import_key(open("receiver.pem").read())
+    
+    name_byte   = name.encode('ascii')
+    signed_name = 
+    hideMessage(img, name_byte, 1)
+    
     img.save(f'certificate/{name.upper()}_{firstname.upper()}.png')
     sign_certificate(f'{name.upper()}_{firstname.upper()}.png')
     
     
 def main(filename, output, message):
+    generate_certificate("117", "JOHN", 20)
     validate_certificate("117_JOHN")
 
 if __name__ == "__main__":
