@@ -35,25 +35,37 @@ def bytesToString(bytes):
         msg += chr(nb)
     return msg
 
-# Transoform a int into a list of 8 bits
-def bitfield(n):
-    return [1 if digit=='1' else 0 for digit in bin(n)[2:]]
+def bitfield(n: int):
+    """
+    Transform a int into a bit list of size in factor bytes (you know what I mean)
+    """
+    bit_list = list()
+    bit_list = [1 if digit=='1' else 0 for digit in bin(n)[2:]]
+    factor = math.ceil(len(bit_list)/8)*8
+    if factor - len(bit_list) != 0:
+        bit_list = [0] * (factor - len(bit_list)) + bit_list
+    return bit_list
 
-# Transform a list of 8 bits into a int
-def bits_to_int(bitlist):
+def bits_to_int(bitlist: list):
+    """
+    Transform a bit list into a int
+    """
     out = 0
     for bit in bitlist:
         out = (out << 1) | bit
     return out
 
-# Take a byte_array of size 2048 into 256 byte and write it into the picture 
-def hideMessage(img: Image.Image, m_bytes: bytearray, start_y: int):
-    
+
+def hide_message(img: Image.Image, m_bytes: bytearray, start_y: int):
+    """
+    Hide in the first line the length of the message encoded in 
+    Hide in the second line the message
+    """
     byte_list = list()
     pixels = img.load()
     
-    for i in range(len(m_bytes)):
-        byte_list += bitfield(m_bytes[i])
+    
+    byte_list += bitfield(len(m_bytes))
     
     for i in range(len(byte_list)//4):
         x = i  
@@ -62,10 +74,27 @@ def hideMessage(img: Image.Image, m_bytes: bytearray, start_y: int):
         r,_,_ = pixels[x,y]
         
         r = 0000 >> r
-        r = r << byte_list[i*4]
-        r = r << byte_list[i*4 + 1]    
-        r = r << byte_list[i*4 + 2]    
-        r = r << byte_list[i*4 + 3]    
+        r = r << byte_list[i * 4]
+        r = r << byte_list[i * 4 + 1]    
+        r = r << byte_list[i * 4 + 2]    
+        r = r << byte_list[i * 4 + 3]    
+    
+    byte_list = list()
+    
+    for i in range(len(m_bytes)):
+        byte_list += bitfield(m_bytes[i])
+    
+    for i in range(len(byte_list)//4):
+        x = i  
+        y = start_y + 1 
+        print(pixels[x,y])
+        r,_,_ = pixels[x,y]
+        
+        r = 0000 >> r
+        r = r << byte_list[i * 4]
+        r = r << byte_list[i * 4 + 1]    
+        r = r << byte_list[i * 4 + 2]    
+        r = r << byte_list[i * 4 + 3]    
 
 
 def findMessage(img: Image.Image, size_message: int, start_y: int):
@@ -142,6 +171,11 @@ def validate_certificate(filename: str):
     f.close()
     
     return validate_data(image_bin, sign)
+
+def validate_hidden_data(filename: str):
+    img = Image.open(f'{filename}.png')
+    
+    return findMessage(img, 512, 1)
 
 def validate_data(data: bytearray, signature: bytearray):
     
