@@ -52,12 +52,13 @@ def hideMessage(img: Image.Image, m_bytes: bytearray, start_y: int):
     byte_list = list()
     pixels = img.load()
     
-    for i in range(len(mBytes)):
-        byte_list += bitfield(mBytes[i])
+    for i in range(len(m_bytes)):
+        byte_list += bitfield(m_bytes[i])
     
     for i in range(len(byte_list)//4):
         x = i  
         y = start_y
+        print(pixels[x,y])
         r,_,_ = pixels[x,y]
         
         r = 0000 >> r
@@ -67,7 +68,7 @@ def hideMessage(img: Image.Image, m_bytes: bytearray, start_y: int):
         r = r << byte_list[i*4 + 3]    
 
 
-def findMessage(img: Image.Image, start_y:int):
+def findMessage(img: Image.Image, size_message: int, start_y: int):
     
     message = list()
     
@@ -76,7 +77,7 @@ def findMessage(img: Image.Image, start_y:int):
     m_bytes = []
 
     # On récupère le message
-    for i in range(0, 512, 4):
+    for i in range(0, size_message, 4):
         x = i
         y = start_y
         r,_,_ = pixels[x,y]
@@ -117,8 +118,8 @@ def sign_certificate(filename):
     message = f.read()
     f.close()
 
-    key_file = open("private.key", "r")
-    private_key = RSA.importKey(key_file.read())
+    private_key = open("private.key", "r")
+    private_key = RSA.importKey(private_key.read())
     f.close()
 
     signer = PKCS1_v1_5.new(private_key)
@@ -131,29 +132,35 @@ def sign_certificate(filename):
     f.close()
 
 
-def validate_certificate(filename):
-    
+def validate_certificate(filename: str):
     f = open(f'certificate/{filename}.png', "rb")
-    data = f.read()
+    image_bin = f.read()
     f.close()
-
-    img = Image.open("certificate/"+filename + ".png") 
-
-    name = findMessage(img,1)
-    firstname = findMessage(img,2)
     
-    digest = SHA512.new()
-    digest.update(data)
-
-    f = open(f'sign/{name}_{firstname}.png.sig', "rb")
+    f = open(f'sign/{filename}.png.sig', "rb")
     sign = f.read()
     f.close()
     
+    return validate_data(image_bin, sign)
+
+def validate_data(data: bytearray, signature: bytearray):
+    
+    # name_sign = findMessage(img, 512, 1)
+    # firstname_sign = findMessage(img, 512, 2)
+    
+    # cypher_name = findMessage(img, 512, 3)
+    # cypher_firstname = findMessage(img, 512, 4)
+
+    hash = SHA512.new()
+    
     public_key_file = open("public.key", "r")
     public_key = RSA.importKey(public_key_file.read())
+    
     verifier = PKCS1_v1_5.new(public_key)
     
-    return verifier.verify(digest, sign)
+    hash.update(data)
+    
+    return verifier.verify(hash, signature)
    
 def generate_certificate(name: str, firstname: str, score: int):
     
@@ -164,27 +171,21 @@ def generate_certificate(name: str, firstname: str, score: int):
 
     img = Image.open(f'diplome-BG.png')
     
-    text(img, 'UNSC', 1020, 400, 60, fill=(0,0,255))
+    text(img, 'UNSC', 255, 100, 15, fill=(0,0,255))
     
-    text(img, f'Spartan', 1000, 600, 60, fill=(0,128,0))
+    text(img, f'Spartan', 250, 150, 15, fill=(0,128,0))
     
-    text(img, f"{name.upper()} {firstname.upper()} a réussi la formation de l'UNSC", 600, 800, 60, fill=(0,0,0))
+    text(img, f"{name.upper()} {firstname.upper()} a réussi la formation de l'UNSC", 150, 200, 15, fill=(0,0,0))
     
-    text(img, f'avec une moyenne de {score}', 800, 1000, 60, fill=(0,0,0))
-    
-    recipient_key = RSA.import_key(open("receiver.pem").read())
-    
-    name_byte   = name.encode('ascii')
-    signed_name = 
-    hideMessage(img, name_byte, 1)
-    
+    text(img, f'avec une moyenne de {score}', 200, 250, 15, fill=(0,0,0))
+        
     img.save(f'certificate/{name.upper()}_{firstname.upper()}.png')
     sign_certificate(f'{name.upper()}_{firstname.upper()}.png')
     
     
 def main(filename, output, message):
     generate_certificate("117", "JOHN", 20)
-    validate_certificate("117_JOHN")
+    print(validate_certificate("117_JOHN"))
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
