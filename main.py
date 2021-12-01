@@ -7,6 +7,7 @@ from Crypto.Hash import SHA512
 from Crypto.Signature import PKCS1_v1_5
 
 import sys
+import math
 
 def invert_line(img):
     m = img.height // 2             # milieu de l'image
@@ -20,21 +21,6 @@ def invert_line(img):
             b = b ^ 0b11111111      # ...
             pixels[x, y] = r, g, b  # on remet les pixels inversÃ©s dans le tableau
 
-def set_bit(value, bit):
-    return value | (1<<bit)
-
-def bytesToBinary(mBytes):
-    fullBin = ""
-    for byte in mBytes:
-        fullBin += bin(byte)[2:]
-    return fullBin
-
-def bytesToString(bytes):
-    msg = ""
-    for nb in bytes:
-        msg += chr(nb)
-    return msg
-
 def bitfield(n: int):
     """
     Transform a int into a bit list of size in factor bytes (you know what I mean)
@@ -44,16 +30,24 @@ def bitfield(n: int):
     factor = math.ceil(len(bit_list)/8)*8
     if factor - len(bit_list) != 0:
         bit_list = [0] * (factor - len(bit_list)) + bit_list
+    
     return bit_list
 
-def bits_to_int(bitlist: list):
+def bits_to_int(bit_list: list, delimiter: int) -> list[int]:
     """
     Transform a bit list into a int
     """
+    
+    i = 0
+    res = list()
     out = 0
-    for bit in bitlist:
+    for bit in bit_list:
         out = (out << 1) | bit
-    return out
+        if (i % delimiter) == delimiter - 1:
+            res.append(out)
+            out = 0
+        i += 1
+    return res
 
 
 def hide_message(img: Image.Image, m_bytes: bytearray, start_y: int):
@@ -97,7 +91,7 @@ def hide_message(img: Image.Image, m_bytes: bytearray, start_y: int):
         r = r << byte_list[i * 4 + 3]    
 
 
-def findMessage(img: Image.Image, size_message: int, start_y: int):
+def findMessage(img: Image.Image, start_y: int):
     
     message = list()
     
@@ -105,8 +99,8 @@ def findMessage(img: Image.Image, size_message: int, start_y: int):
 
     m_bytes = []
 
-    # On récupère le message
-    for i in range(0, size_message, 4):
+    # Get message length
+    for i in range(0, 4, 1):
         x = i
         y = start_y
         r,_,_ = pixels[x,y]
@@ -121,8 +115,27 @@ def findMessage(img: Image.Image, size_message: int, start_y: int):
         bit = r & 0b1
         m_bytes.append(bit)
     
+    size = bits_to_int(m_bytes, 16)
+    
+    m_bytes = []
+    # Get message
+    for i in range(0, size//4):
+        x = i
+        y = start_y + 1
+        r,_,_ = pixels[x,y]
+        bit = r & 0b1
+        m_bytes.append(bit)
+        r = r >> 1
+        bit = r & 0b1
+        m_bytes.append(bit)
+        bit = r & 0b1
+        m_bytes.append(bit)
+        r = r >> 1
+        bit = r & 0b1
+        m_bytes.append(bit)
+
     # Split m_bytes into array of 8 bits
-    for i in range(0, len(m_bytes)//8, step=8):
+    for i in range(0, len(m_bytes), 8):
         message.append(bits_to_int(m_bytes[i:i+8]))
 
     return message
@@ -141,7 +154,7 @@ def generate_pair_key():
     out.close()
     
     
-def sign_certificate(filename):
+def sign_data(byte_array: bytearray):
     
     f = open(f"certificate/{filename}", "rb")
     message = f.read()
@@ -160,6 +173,24 @@ def sign_certificate(filename):
     f.write(sig)
     f.close()
 
+def sign_file(filename: str):
+    
+    f = open(f"certificate/{filename}", "rb")
+    message = f.read()
+    f.close()
+
+    private_key = open("private.key", "r")
+    private_key = RSA.importKey(private_key.read())
+    f.close()
+
+    signer = PKCS1_v1_5.new(private_key)
+    digest = SHA512.new()
+    digest.update(message)
+    sig = signer.sign(digest)
+
+    f = open(f'sign/{filename}.sig', "wb")
+    f.write(sig)
+    f.close()
 
 def validate_certificate(filename: str):
     f = open(f'certificate/{filename}.png', "rb")
@@ -174,6 +205,12 @@ def validate_certificate(filename: str):
 
 def validate_hidden_data(filename: str):
     img = Image.open(f'{filename}.png')
+    
+    name_sign = findMessage(img, 1)
+    firstname_sign = findMessage(img, 3)
+    
+    cypher_name = findMessage(img, 5)
+    cypher_firstname = findMessage(img, 7)
     
     return findMessage(img, 512, 1)
 
@@ -205,14 +242,16 @@ def generate_certificate(name: str, firstname: str, score: int):
 
     img = Image.open(f'diplome-BG.png')
     
-    text(img, 'UNSC', 255, 100, 15, fill=(0,0,255))
+    text(img, 'UNSC', 350, 150, 80, fill=(0,0,255))
     
-    text(img, f'Spartan', 250, 150, 15, fill=(0,128,0))
+    text(img, f'Spartan', 380, 270, 50, fill=(0,128,0))
     
-    text(img, f"{name.upper()} {firstname.upper()} a réussi la formation de l'UNSC", 150, 200, 15, fill=(0,0,0))
+    text(img, f"{name.upper()} {firstname.upper()} a réussi la formation de l'UNSC", 200, 375, 30, fill=(0,0,0))
     
-    text(img, f'avec une moyenne de {score}', 200, 250, 15, fill=(0,0,0))
+    text(img, f'avec une moyenne de {score}', 325, 425, 30, fill=(0,0,0))
         
+    hide_message(img, firstname, start_y)
+    
     img.save(f'certificate/{name.upper()}_{firstname.upper()}.png')
     sign_certificate(f'{name.upper()}_{firstname.upper()}.png')
     
