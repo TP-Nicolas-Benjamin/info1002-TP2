@@ -25,12 +25,16 @@ Les commandes pour les tests sont les suivantes :
     $ python main.py --generate "Armstrong" "Lance" "13"
 
     # Verify a certificate with the signature
-    $ python main.py ----validate "Armstrong_Lance.png" "Armstrong_Lance.png.sig"
+    $ python main.py --validate "Armstrong_Lance.png" "Armstrong_Lance.png.sig"
 
     # Read in the file the size and the message in the next line
     $ python main.py --read "Armstrong_Lance.png" 0
 
     # Write the message size and the message in the file
-    $ python main.py --hide-message "Armstrong_Lance.png" 0 "Hello World"    
+    $ python main.py --hide-message "Armstrong_Lance.png" 0 "Hello World"
 
+    # Validation error
+    $ python main.py --validate "verdant_benjamin_falsified.png" "verdant_benjamin.png.sig"
 ```
+
+La documentation est dans le dossier tp/info1002-TP2.

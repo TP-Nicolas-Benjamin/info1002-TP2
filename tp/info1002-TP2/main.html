@@ -253,10 +253,8 @@ def sign_data(byte_array: bytearray) -&gt; bytearray:
     private_key_file.close()
 
     signer = PKCS1_v1_5.new(private_key)
-    digest = SHA512.new()
-    digest.update(bytes(byte_array))
+    digest = SHA512.new(byte_array)
     sig = signer.sign(digest)
-
     return sig
 
 
@@ -305,7 +303,7 @@ def validate_certificate(filename: str, signature: str) -&gt; bool:
     sign = f.read()
     f.close()
 
-    return validate_data(image_bin, sign)
+    return validate_data(image_bin, sign)  # and validate_hidden_data(filename)
 
 
 def validate_hidden_data(filename: str) -&gt; bool:
@@ -329,8 +327,8 @@ def validate_hidden_data(filename: str) -&gt; bool:
     msgLength = find_message_length(img, 10)
     firstname_sign = find_message(img, msgLength, 11)
 
-    firstname_valid = validate_data(firstname_plain.encode(
-        &#34;utf-8&#34;), firstname_sign.encode(&#34;utf-8&#34;))
+    firstname_valid = validate_data(
+        firstname_plain.encode(&#39;utf-8&#39;), firstname_sign.encode(&#39;utf-8&#39;))
 
     if firstname_valid:
         print(&#34;firstname valid&#34;)
@@ -393,14 +391,12 @@ def validate_data(data: bytearray, signature: bytearray) -&gt; bool:
     Returns:
         bool: True if the data is valid, False otherwise
     &#34;&#34;&#34;
-    hash = SHA512.new()
+    hash = SHA512.new(data)
 
     public_key_file = open(&#34;public.key&#34;, &#34;r&#34;)
     public_key = RSA.importKey(public_key_file.read())
 
     verifier = PKCS1_v1_5.new(public_key)
-
-    hash.update(data)
 
     return verifier.verify(hash, signature)
 
@@ -438,10 +434,13 @@ def generate_certificate(name: str, firstname: str, score: int):
 
     hide_message(img, firstname, 0)
     hide_bytes(img, sign_data(firstname.encode(&#39;utf-8&#39;)), 10)
+
     hide_message(img, name, 20)
     hide_bytes(img, sign_data(name.encode(&#39;utf-8&#39;)), 30)
+
     hide_message(img, str(score), 40)
     hide_bytes(img, sign_data(str(score).encode(&#34;utf-8&#34;)), 50)
+
     hide_message(img, footprint, 60)
     hide_bytes(img, sign_data(footprint.encode(&#39;utf-8&#39;)), 70)
 
@@ -463,6 +462,12 @@ Commands available :
     [arguments]: &lt;filename&gt; of the certificate to validate and the signature of the certificate (&lt;filename&gt;.png.sign). Files are directly in the certificate folder, no needs to add ./certificate.
     [example]: python3 main.py --validate &#34;John_Doe.png&#34; &#34;John_Doe.png.sign&#34;
     [output]: True or False
+
+# Doesn&#39;t work yet
+# --validate-hidden: validate the hidden data of the certificate of the user
+#     [arguments]: &lt;filename&gt; of the certificate to validate
+#     [example]: python3 main.py --validate-hidden &#34;John_Doe.png&#34;
+#     [output]: True or False
 
 --read: read the message in the picture at the position &lt;position&gt; and print it
     [arguments]: &lt;filename&gt; of the picture and the position of the message
@@ -517,6 +522,17 @@ if __name__ == &#34;__main__&#34;:
     [example]: python3 main.py --validate &#34;John_Doe.png&#34; &#34;John_Doe.png.sign&#34;
     [output]: True or False&#34;&#34;&#34;)
                 exit(1)
+    #     if arg == &#34;--validate-hidden&#34;:
+    #         if len(sys.argv) == 3:
+    #             filename = sys.argv[2]
+    #             print(validate_hidden_data(filename))
+    #             exit(0)
+    #         else:
+    #             print(&#34;&#34;&#34;Error: --validate-hidden requires 2 arguments
+    # [arguments]: &lt;filename&gt; of the certificate to validate]
+    # [example]: python3 main.py --validate-hidden &#34;John_Doe.png&#34;]
+    # [output]: True or False&#34;&#34;&#34;)
+    #             exit(1)
         if arg == &#34;--read&#34;:
             if len(sys.argv) == 4:
                 filename = sys.argv[2]
@@ -766,10 +782,13 @@ if __name__ == &#34;__main__&#34;:
 
     hide_message(img, firstname, 0)
     hide_bytes(img, sign_data(firstname.encode(&#39;utf-8&#39;)), 10)
+
     hide_message(img, name, 20)
     hide_bytes(img, sign_data(name.encode(&#39;utf-8&#39;)), 30)
+
     hide_message(img, str(score), 40)
     hide_bytes(img, sign_data(str(score).encode(&#34;utf-8&#34;)), 50)
+
     hide_message(img, footprint, 60)
     hide_bytes(img, sign_data(footprint.encode(&#39;utf-8&#39;)), 70)
 
@@ -857,6 +876,12 @@ Commands available :
     [arguments]: &lt;filename&gt; of the certificate to validate and the signature of the certificate (&lt;filename&gt;.png.sign). Files are directly in the certificate folder, no needs to add ./certificate.
     [example]: python3 main.py --validate &#34;John_Doe.png&#34; &#34;John_Doe.png.sign&#34;
     [output]: True or False
+
+# Doesn&#39;t work yet
+# --validate-hidden: validate the hidden data of the certificate of the user
+#     [arguments]: &lt;filename&gt; of the certificate to validate
+#     [example]: python3 main.py --validate-hidden &#34;John_Doe.png&#34;
+#     [output]: True or False
 
 --read: read the message in the picture at the position &lt;position&gt; and print it
     [arguments]: &lt;filename&gt; of the picture and the position of the message
@@ -1059,10 +1084,8 @@ Commands available :
     private_key_file.close()
 
     signer = PKCS1_v1_5.new(private_key)
-    digest = SHA512.new()
-    digest.update(bytes(byte_array))
+    digest = SHA512.new(byte_array)
     sig = signer.sign(digest)
-
     return sig</code></pre>
 </details>
 </dd>
@@ -1178,7 +1201,7 @@ Commands available :
     sign = f.read()
     f.close()
 
-    return validate_data(image_bin, sign)</code></pre>
+    return validate_data(image_bin, sign)  # and validate_hidden_data(filename)</code></pre>
 </details>
 </dd>
 <dt id="info1002-TP2.main.validate_data"><code class="name flex">
@@ -1213,14 +1236,12 @@ Commands available :
     Returns:
         bool: True if the data is valid, False otherwise
     &#34;&#34;&#34;
-    hash = SHA512.new()
+    hash = SHA512.new(data)
 
     public_key_file = open(&#34;public.key&#34;, &#34;r&#34;)
     public_key = RSA.importKey(public_key_file.read())
 
     verifier = PKCS1_v1_5.new(public_key)
-
-    hash.update(data)
 
     return verifier.verify(hash, signature)</code></pre>
 </details>
@@ -1265,8 +1286,8 @@ Commands available :
     msgLength = find_message_length(img, 10)
     firstname_sign = find_message(img, msgLength, 11)
 
-    firstname_valid = validate_data(firstname_plain.encode(
-        &#34;utf-8&#34;), firstname_sign.encode(&#34;utf-8&#34;))
+    firstname_valid = validate_data(
+        firstname_plain.encode(&#39;utf-8&#39;), firstname_sign.encode(&#39;utf-8&#39;))
 
     if firstname_valid:
         print(&#34;firstname valid&#34;)

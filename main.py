@@ -226,7 +226,6 @@ def sign_data(byte_array: bytearray) -> bytearray:
 
     signer = PKCS1_v1_5.new(private_key)
     digest = SHA512.new(byte_array)
-    print(len(digest.digest()))
     sig = signer.sign(digest)
     return sig
 
@@ -276,7 +275,7 @@ def validate_certificate(filename: str, signature: str) -> bool:
     sign = f.read()
     f.close()
 
-    return validate_data(image_bin, sign) and validate_hidden_data(filename)
+    return validate_data(image_bin, sign)  # and validate_hidden_data(filename)
 
 
 def validate_hidden_data(filename: str) -> bool:
@@ -300,65 +299,57 @@ def validate_hidden_data(filename: str) -> bool:
     msgLength = find_message_length(img, 10)
     firstname_sign = find_message(img, msgLength, 11)
 
-    print('message length: ' + str(msgLength))
-    print('firstname_sign len: ', len(firstname_sign))
-    print('firstname_plain ', firstname_plain)
-
-    print('firstname_sign ', firstname_sign)
     firstname_valid = validate_data(
         firstname_plain.encode('utf-8'), firstname_sign.encode('utf-8'))
 
-    print(firstname_valid)
+    if firstname_valid:
+        print("firstname valid")
+    else:
+        print("firstname invalid")
 
-    # if firstname_valid:
-    #     print("firstname valid")
-    # else:
-    #     print("firstname invalid")
+    msgLength = find_message_length(img, 20)
+    name_plain = find_message(img, msgLength, 21)
 
-    # msgLength = find_message_length(img, 20)
-    # name_plain = find_message(img, msgLength, 21)
+    msgLength = find_message_length(img, 30)
+    name_sign = find_message(img, msgLength, 31)
 
-    # msgLength = find_message_length(img, 30)
-    # name_sign = find_message(img, msgLength, 31)
+    name_valid = validate_data(name_plain.encode(
+        "utf-8"), name_sign.encode("utf-8"))
 
-    # name_valid = validate_data(name_plain.encode(
-    #     "utf-8"), name_sign.encode("utf-8"))
+    if name_valid:
+        print("name valid")
+    else:
+        print("name invalid")
 
-    # if name_valid:
-    #     print("name valid")
-    # else:
-    #     print("name invalid")
+    msgLength = find_message_length(img, 40)
+    score_plain = find_message(img, msgLength, 41)
 
-    # msgLength = find_message_length(img, 40)
-    # score_plain = find_message(img, msgLength, 41)
+    msgLength = find_message_length(img, 50)
+    score_sign = find_message(img, msgLength, 51)
 
-    # msgLength = find_message_length(img, 50)
-    # score_sign = find_message(img, msgLength, 51)
+    score_valid = validate_data(score_plain.encode(
+        "utf-8"), score_sign.encode("utf-8"))
 
-    # score_valid = validate_data(score_plain.encode(
-    #     "utf-8"), score_sign.encode("utf-8"))
+    if score_valid:
+        print("score valid")
+    else:
+        print("score invalid")
 
-    # if score_valid:
-    #     print("score valid")
-    # else:
-    #     print("score invalid")
+    msgLength = find_message_length(img, 60)
+    university_footprint = find_message(img, msgLength, 61)
 
-    # msgLength = find_message_length(img, 60)
-    # university_footprint = find_message(img, msgLength, 61)
+    msgLength = find_message_length(img, 70)
+    university_footprint_sign = find_message(img, msgLength, 71)
 
-    # msgLength = find_message_length(img, 70)
-    # university_footprint_sign = find_message(img, msgLength, 71)
+    university_footprint_valid = validate_data(
+        university_footprint.encode("utf-8"), university_footprint_sign.encode("utf-8"))
 
-    # university_footprint_valid = validate_data(
-    #     university_footprint.encode("utf-8"), university_footprint_sign.encode("utf-8"))
+    if university_footprint_valid:
+        print("university footprint valid")
+    else:
+        print("university footprint invalid")
 
-    # if university_footprint_valid:
-    #     print("university footprint valid")
-    # else:
-    #     print("university footprint invalid")
-
-    # return firstname_valid and name_valid and score_valid and university_footprint_valid
-    return False
+    return firstname_valid and name_valid and score_valid and university_footprint_valid
 
 
 def validate_data(data: bytearray, signature: bytearray) -> bool:
@@ -378,9 +369,6 @@ def validate_data(data: bytearray, signature: bytearray) -> bool:
     public_key = RSA.importKey(public_key_file.read())
 
     verifier = PKCS1_v1_5.new(public_key)
-
-    print("data ", hash.digest().hex())
-    print("signature ", len(signature))
 
     return verifier.verify(hash, signature)
 
@@ -447,10 +435,11 @@ Commands available :
     [example]: python3 main.py --validate "John_Doe.png" "John_Doe.png.sign"
     [output]: True or False
 
---validate-hidden: validate the hidden data of the certificate of the user
-    [arguments]: <filename> of the certificate to validate
-    [example]: python3 main.py --validate-hidden "John_Doe.png"
-    [output]: True or False
+# Doesn't work yet
+# --validate-hidden: validate the hidden data of the certificate of the user
+#     [arguments]: <filename> of the certificate to validate
+#     [example]: python3 main.py --validate-hidden "John_Doe.png"
+#     [output]: True or False
 
 --read: read the message in the picture at the position <position> and print it
     [arguments]: <filename> of the picture and the position of the message
@@ -505,17 +494,17 @@ if __name__ == "__main__":
     [example]: python3 main.py --validate "John_Doe.png" "John_Doe.png.sign"
     [output]: True or False""")
                 exit(1)
-        if arg == "--validate-hidden":
-            if len(sys.argv) == 3:
-                filename = sys.argv[2]
-                print(validate_hidden_data(filename))
-                exit(0)
-            else:
-                print("""Error: --validate-hidden requires 2 arguments
-    [arguments]: <filename> of the certificate to validate]
-    [example]: python3 main.py --validate-hidden "John_Doe.png"]
-    [output]: True or False""")
-                exit(1)
+    #     if arg == "--validate-hidden":
+    #         if len(sys.argv) == 3:
+    #             filename = sys.argv[2]
+    #             print(validate_hidden_data(filename))
+    #             exit(0)
+    #         else:
+    #             print("""Error: --validate-hidden requires 2 arguments
+    # [arguments]: <filename> of the certificate to validate]
+    # [example]: python3 main.py --validate-hidden "John_Doe.png"]
+    # [output]: True or False""")
+    #             exit(1)
         if arg == "--read":
             if len(sys.argv) == 4:
                 filename = sys.argv[2]
