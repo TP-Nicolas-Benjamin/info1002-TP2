@@ -490,7 +490,7 @@ if __name__ == "__main__":
     [output]: True or False""")
                 exit(1)
         if arg == "--read":
-            if len(sys.argv) == 3:
+            if len(sys.argv) == 4:
                 filename = sys.argv[2]
                 line = int(sys.argv[3])
                 img = Image.open(filename)
@@ -505,7 +505,7 @@ if __name__ == "__main__":
     [output]: John""")
                 exit(1)
         if arg == "--hide-message":
-            if len(sys.argv) == 4:
+            if len(sys.argv) == 5:
                 filename = sys.argv[2]
                 line = int(sys.argv[3])
                 message = sys.argv[4]
@@ -521,7 +521,7 @@ if __name__ == "__main__":
     [output]: John_Doe.png""")
                 exit(1)
         if arg == "--pair":
-            if len(sys.argv) == 3:
+            if len(sys.argv) == 2:
                 generate_pair_key()
                 print("Keys generated")
                 exit(0)

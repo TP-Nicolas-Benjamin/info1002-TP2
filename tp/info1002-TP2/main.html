@@ -1,0 +1,1366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>info1002-TP2.main API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>info1002-TP2.main</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA512
+from Crypto.Signature import PKCS1_v1_5
+
+import sys
+
+# Size of stored length in bits
+TAILLE = 16
+
+
+def invert_line(img: Image.Image) -&gt; None:
+    &#34;&#34;&#34;
+    invert_line invert half of the image
+
+    Args:
+        img (Image.Image): image to invert
+    &#34;&#34;&#34;
+    m = img.height // 2             # milieu de l&#39;image
+    pixels = img.load()             # tableau des pixels
+
+    for y in range(m, img.height):
+        for x in range(0, img.width):
+            # on rÃ©cupÃ¨re les composantes RGB du pixel (x,m)
+            r, g, b = pixels[x, y]
+            r = r ^ 0b11111111      # on les inverse bit Ã  bit avec un XOR
+            g = g ^ 0b11111111      # ...
+            b = b ^ 0b11111111      # ...
+            # on remet les pixels inversÃ©s dans le tableau
+            pixels[x, y] = r, g, b
+
+
+def get_LSB_of_int(color: int) -&gt; int:
+    &#34;&#34;&#34;
+    get_LSB_of_int get low bit of an int
+
+    Args:
+        color (int): int to get the low bit
+
+    Returns:
+        int: lowest bit of the int
+    &#34;&#34;&#34;
+    return color &amp; 1
+
+
+def bytes_to_binary(b: bytes) -&gt; bytes:
+    &#34;&#34;&#34;
+    bytes_to_binary convert a bytes to a binary string
+
+    Args:
+        b (bytes): bytes to convert
+
+    Returns:
+        bytes: binary string converted
+    &#34;&#34;&#34;
+    tmp = b.hex()
+    return bin(int(tmp, 16))[2:].zfill(8)
+
+
+def string_to_binary(string: str) -&gt; bytes:
+    &#34;&#34;&#34;
+    string_to_binary convert a string to a binary string
+
+    Args:
+        string (str): string to convert
+
+    Returns:
+        bytes: binary string converted
+    &#34;&#34;&#34;
+    return &#39;&#39;.join(format(x, &#39;08b&#39;) for x in bytearray(string, &#39;utf-8&#39;))
+
+
+def binary_to_string(binary: bytes) -&gt; str:
+    &#34;&#34;&#34;
+    binary_to_string convert a binary string to a string
+
+    Args:
+        binary (bytes): binary string to convert
+
+    Returns:
+        str: string converted
+    &#34;&#34;&#34;
+
+    # Split the binary string into 8-bit chunks
+    binTab = [binary[i:i+8] for i in range(0, len(binary), 8)]
+
+    # Convert each 8-bit chunk into a string
+    msg = &#34;&#34;
+    for b in binTab:
+        msg += chr(int(b, 2))
+
+    return msg
+
+
+def hide_bytes(img: Image.Image, b: bytes, y_index: int):
+    &#34;&#34;&#34;
+    hide_bytes hide the bytes in the image at (0,y_index)
+
+    Args:
+        img (Image.Image): image to hide the bytes
+        b (bytes): bytes to hide
+        y_index (int): y index in the image to hide the bytes
+    &#34;&#34;&#34;
+
+    msgBin = bytes_to_binary(b)
+    hide_binary(img, b, msgBin, y_index)
+
+
+def hide_message(img: Image.Image, message: str, y_index: int):
+    &#34;&#34;&#34;
+    hide_message hide the message in the image at (0,y_index)
+
+    Args:
+        img (Image.Image): image to hide the message
+        message (str): message to hide
+        y_index (int): y index in the image to hide the message
+    &#34;&#34;&#34;
+    msgBin = string_to_binary(message)
+    hide_binary(img, message, msgBin, y_index)
+
+
+def hide_binary(img: Image.Image, message: str, binary: bytes, y_index: int):
+    &#34;&#34;&#34;
+    hide_binary hide the binary in the image at (0,y_index)
+
+    Args:
+        img (Image.Image): image to hide the binary
+        message (str): used to know the length of the binary
+        binary (bytes): binary to hide
+        y_index (int): y index in the image to hide the binary
+    &#34;&#34;&#34;
+
+    pixels = img.load()
+
+    msgLengthBin = format(len(message), &#39;016b&#39;)
+
+    # inscrit dans le bit de poids faible du rouge de chaque pixel un bit de notre taille de message
+    for i in range(TAILLE):
+        x = i % img.width
+        y = y_index
+        r, _, _ = pixels[x, y]
+        r = (r &amp; ~1) | int(msgLengthBin[i])
+        pixels[x, y] = r, _, _
+
+    for i in range(len(binary)):
+        x = i % img.width
+        y = y_index + 1 + (i // img.width) % img.height
+        r, _, _ = pixels[x, y]
+        r = (r &amp; ~1) | int(binary[i])
+        pixels[x, y] = r, _, _
+
+
+def find_message_length(img, y_index):
+
+    pixels = img.load()
+
+    msgLengthBin = &#34;&#34;
+
+    # récupère le bit de poids faible de la couleur rouge de chaque pixels
+    for i in range(TAILLE):
+        r, _, _ = pixels[i, y_index]
+        msgLengthBin += str(get_LSB_of_int(r))
+
+    return int(msgLengthBin, 2)
+
+
+def find_message(img: Image.Image, msg_length: int, y_index: int) -&gt; str:
+    &#34;&#34;&#34;
+    find_message find the message of size msg_length at (0,y_index) in the image and return it
+
+    Args:
+        img (Image.Image): image to search
+        msg_length (int): size of the message to find
+        y_index (int): y index of the message to find
+
+    Returns:
+        str: message found
+    &#34;&#34;&#34;
+    pixels = img.load()
+
+    fullBin = &#34;&#34;
+
+    # Get the lower bits of the red color of each pixel
+    for i in range(msg_length * 8):
+        x = i % img.width
+        y = y_index + (i // img.width) % img.height
+        r, _, _ = pixels[x, y]
+
+        fullBin += str(get_LSB_of_int(r))
+
+    return binary_to_string(fullBin)
+
+
+def generate_pair_key():
+    &#34;&#34;&#34;
+    generate_pair_key generate a pair of 2048 bit sized keys
+    &#34;&#34;&#34;
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    out = open(&#34;private.key&#34;, &#34;wb&#34;)
+    out.write(private_key)
+    out.close()
+
+    public_key = key.publickey().export_key()
+    out = open(&#34;public.key&#34;, &#34;wb&#34;)
+    out.write(public_key)
+    out.close()
+
+
+def sign_data(byte_array: bytearray) -&gt; bytearray:
+    &#34;&#34;&#34;
+    sign_data sign the byte_array with the private key
+
+    Args:
+        byte_array (bytearray): byte_array to sign
+
+    Returns:
+        bytearray: signed byte_array
+    &#34;&#34;&#34;
+    private_key_file = open(&#34;private.key&#34;, &#34;r&#34;)
+    private_key = RSA.importKey(private_key_file.read())
+    private_key_file.close()
+
+    signer = PKCS1_v1_5.new(private_key)
+    digest = SHA512.new()
+    digest.update(bytes(byte_array))
+    sig = signer.sign(digest)
+
+    return sig
+
+
+def sign_file(filename: str):
+    &#34;&#34;&#34;
+    sign_file sign the file with the private key
+
+    Args:
+        filename (str): file to sign
+    &#34;&#34;&#34;
+
+    f = open(f&#34;certificate/{filename}&#34;, &#34;rb&#34;)
+    message = f.read()
+    f.close()
+
+    private_key = open(&#34;private.key&#34;, &#34;r&#34;)
+    private_key = RSA.importKey(private_key.read())
+    f.close()
+
+    signer = PKCS1_v1_5.new(private_key)
+    digest = SHA512.new()
+    digest.update(bytes(message))
+    sig = signer.sign(digest)
+
+    f = open(f&#39;sign/{filename}.sig&#39;, &#34;wb&#34;)
+    f.write(sig)
+    f.close()
+
+
+def validate_certificate(filename: str, signature: str) -&gt; bool:
+    &#34;&#34;&#34;
+    validate_certificate validate the certificate of the file
+
+    Args:
+        filename (str): file to validate
+        signature (str): signature of the file
+
+    Returns:
+        bool: True if the certificate is valid, False otherwise
+    &#34;&#34;&#34;
+    f = open(f&#39;certificate/{filename}&#39;, &#34;rb&#34;)
+    image_bin = f.read()
+    f.close()
+
+    f = open(f&#39;sign/{signature}&#39;, &#34;rb&#34;)
+    sign = f.read()
+    f.close()
+
+    return validate_data(image_bin, sign)
+
+
+def validate_hidden_data(filename: str) -&gt; bool:
+    &#34;&#34;&#34;
+    validate_hidden_data validate the hidden data of the file
+
+    Args:
+        filename (str): file to validate
+
+    Returns:
+        bool: True if the hidden data is valid, False otherwise
+    &#34;&#34;&#34;
+
+    filename = f&#39;certificate/{filename}&#39;
+
+    img = Image.open(filename)
+
+    msgLength = find_message_length(img, 0)
+    firstname_plain = find_message(img, msgLength, 1)
+
+    msgLength = find_message_length(img, 10)
+    firstname_sign = find_message(img, msgLength, 11)
+
+    firstname_valid = validate_data(firstname_plain.encode(
+        &#34;utf-8&#34;), firstname_sign.encode(&#34;utf-8&#34;))
+
+    if firstname_valid:
+        print(&#34;firstname valid&#34;)
+    else:
+        print(&#34;firstname invalid&#34;)
+
+    msgLength = find_message_length(img, 20)
+    name_plain = find_message(img, msgLength, 21)
+
+    msgLength = find_message_length(img, 30)
+    name_sign = find_message(img, msgLength, 31)
+
+    name_valid = validate_data(name_plain.encode(
+        &#34;utf-8&#34;), name_sign.encode(&#34;utf-8&#34;))
+
+    if name_valid:
+        print(&#34;name valid&#34;)
+    else:
+        print(&#34;name invalid&#34;)
+
+    msgLength = find_message_length(img, 40)
+    score_plain = find_message(img, msgLength, 41)
+
+    msgLength = find_message_length(img, 50)
+    score_sign = find_message(img, msgLength, 51)
+
+    score_valid = validate_data(score_plain.encode(
+        &#34;utf-8&#34;), score_sign.encode(&#34;utf-8&#34;))
+
+    if score_valid:
+        print(&#34;score valid&#34;)
+    else:
+        print(&#34;score invalid&#34;)
+
+    msgLength = find_message_length(img, 60)
+    university_footprint = find_message(img, msgLength, 61)
+
+    msgLength = find_message_length(img, 70)
+    university_footprint_sign = find_message(img, msgLength, 71)
+
+    university_footprint_valid = validate_data(
+        university_footprint.encode(&#34;utf-8&#34;), university_footprint_sign.encode(&#34;utf-8&#34;))
+
+    if university_footprint_valid:
+        print(&#34;university footprint valid&#34;)
+    else:
+        print(&#34;university footprint invalid&#34;)
+
+    return firstname_valid and name_valid and score_valid and university_footprint_valid
+
+
+def validate_data(data: bytearray, signature: bytearray) -&gt; bool:
+    &#34;&#34;&#34;
+    validate_data validate the data with the public key
+
+    Args:
+        data (bytearray): data to validate
+        signature (bytearray): signature of the data
+
+    Returns:
+        bool: True if the data is valid, False otherwise
+    &#34;&#34;&#34;
+    hash = SHA512.new()
+
+    public_key_file = open(&#34;public.key&#34;, &#34;r&#34;)
+    public_key = RSA.importKey(public_key_file.read())
+
+    verifier = PKCS1_v1_5.new(public_key)
+
+    hash.update(data)
+
+    return verifier.verify(hash, signature)
+
+
+def generate_certificate(name: str, firstname: str, score: int):
+    &#34;&#34;&#34;
+    generate_certificate generate a certificate for the user and save it in the certificate folder. And sign it with the private key in the sign folder.
+
+    Args:
+        name (str): name of the user
+        firstname (str): firstname of the user
+        score (int): score of the user
+    &#34;&#34;&#34;
+    def text(img, text, x, y, text_size, font=&#34;arial&#34;, fill=(0, 0, 0)):
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype(f&#39;fonts/{font}.ttf&#39;, text_size)
+        draw.text((x, y), text, fill, font)
+
+    img = Image.open(&#39;diplome-BG.png&#39;).convert(&#34;RGB&#34;)
+
+    text(img, &#39;UNSC&#39;, 350, 150, 80, fill=(0, 0, 255))
+
+    text(img, f&#39;Spartan&#39;, 380, 270, 50, fill=(0, 128, 0))
+
+    text(img, f&#34;{name.upper()} {firstname.upper()} a réussi la formation de l&#39;UNSC&#34;,
+         200, 375, 30, fill=(0, 0, 0))
+
+    text(img, f&#39;avec une moyenne de {score}&#39;, 325, 425, 30, fill=(0, 0, 0))
+
+    footprint = &#34;UNSC Institute of Reach&#34;
+
+    filename = f&#39;{name}_{firstname}.png&#39;
+
+    img_path = f&#39;certificate/{filename}&#39;
+
+    hide_message(img, firstname, 0)
+    hide_bytes(img, sign_data(firstname.encode(&#39;utf-8&#39;)), 10)
+    hide_message(img, name, 20)
+    hide_bytes(img, sign_data(name.encode(&#39;utf-8&#39;)), 30)
+    hide_message(img, str(score), 40)
+    hide_bytes(img, sign_data(str(score).encode(&#34;utf-8&#34;)), 50)
+    hide_message(img, footprint, 60)
+    hide_bytes(img, sign_data(footprint.encode(&#39;utf-8&#39;)), 70)
+
+    img.save(img_path)
+
+    sign_file(filename)
+
+
+def help():
+    return &#34;&#34;&#34;Usage: python3 main.py [commands] [arguments]
+Commands available :
+--help: print this help
+--generate: generate a certificate for the user and save it in the certificate folder. And sign it with the private key in the sign folder.
+    [arguments]: &lt;name&gt;  &lt;firstname&gt; &lt;score&gt;
+    [example]: python3 main.py --generate &#34;Doe&#34; &#34;John&#34; 20
+    [output]: certificate/John_Doe.png and sign/John_Doe.png
+
+--validate: validate the certificate of the user
+    [arguments]: &lt;filename&gt; of the certificate to validate and the signature of the certificate (&lt;filename&gt;.png.sign). Files are directly in the certificate folder, no needs to add ./certificate.
+    [example]: python3 main.py --validate &#34;John_Doe.png&#34; &#34;John_Doe.png.sign&#34;
+    [output]: True or False
+
+--read: read the message in the picture at the position &lt;position&gt; and print it
+    [arguments]: &lt;filename&gt; of the picture and the position of the message
+    [example]: python3 main.py --read &#34;John_Doe.png&#34; 0
+    [output]: John
+
+--hide-message: hide the message in the picture at the position &lt;position&gt;
+    [arguments]: &lt;filename&gt; of the picture and the position of the message and the message to hide
+    [example]: python3 main.py --hide-message &#34;John_Doe.png&#34; 0 &#34;John&#34;
+    [output]: John_Doe.png
+
+--pair: generate a pair of keys and save them in the folder
+    [arguments]: None
+    [example]: python3 main.py --pair
+    [output]: ./public.key and ./private.key
+
+&#34;&#34;&#34;
+
+
+if __name__ == &#34;__main__&#34;:
+    # If no args are given, print the help
+    if len(sys.argv) == 1:
+        print(help())
+        exit(1)
+    for arg in sys.argv:
+        if arg == &#34;--help&#34;:
+            print(help())
+            exit(0)
+        if arg == &#34;--generate&#34;:
+            if len(sys.argv) == 5:
+                name = sys.argv[2]
+                firstname = sys.argv[3]
+                score = int(sys.argv[4])
+                generate_certificate(name, firstname, score)
+                exit(0)
+            else:
+                print(&#34;&#34;&#34;Error: --generate requires 3 arguments
+    [arguments]: &lt;name&gt;  &lt;firstname&gt; &lt;score&gt;
+    [example]: python3 main.py --generate &#34;Doe&#34; &#34;John&#34; 20
+    [output]: certificate/John_Doe.png and sign/John_Doe.png
+&#34;&#34;&#34;)
+                exit(1)
+        if arg == &#34;--validate&#34;:
+            if len(sys.argv) == 4:
+                filename = sys.argv[2]
+                signature = sys.argv[3]
+                print(validate_certificate(filename, signature))
+                exit(0)
+            else:
+                print(&#34;&#34;&#34;Error: --validate requires 2 arguments
+    [arguments]: &lt;filename&gt; of the certificate to validate and the signature of the certificate (&lt;filename&gt;.png.sign). Files are directly in the certificate folder, no needs to add ./certificate.
+    [example]: python3 main.py --validate &#34;John_Doe.png&#34; &#34;John_Doe.png.sign&#34;
+    [output]: True or False&#34;&#34;&#34;)
+                exit(1)
+        if arg == &#34;--read&#34;:
+            if len(sys.argv) == 4:
+                filename = sys.argv[2]
+                line = int(sys.argv[3])
+                img = Image.open(filename)
+                size = find_message_length(img, line)
+                print(f&#34;Size message found: {size}&#34;)
+                print(find_message(img, size, line + 1))
+                exit(0)
+            else:
+                print(&#34;&#34;&#34;Error: --read requires 2 arguments
+    [arguments]: &lt;filename&gt; of the picture and the position of the message
+    [example]: python3 main.py --read &#34;John_Doe.png&#34; 0
+    [output]: John&#34;&#34;&#34;)
+                exit(1)
+        if arg == &#34;--hide-message&#34;:
+            if len(sys.argv) == 5:
+                filename = sys.argv[2]
+                line = int(sys.argv[3])
+                message = sys.argv[4]
+                img = Image.open(filename)
+                hide_message(img, message, int(line))
+                print(f&#34;Message {message} hidden in {filename} at line {line}&#34;)
+                img.save(filename)
+                exit(0)
+            else:
+                print(&#34;&#34;&#34;Error: --hide-message requires 3 arguments
+    [arguments]: &lt;filename&gt; of the picture and the position of the message and the message to hide
+    [example]: python3 main.py --hide-message &#34;John_Doe.png&#34; 0 &#34;John&#34;
+    [output]: John_Doe.png&#34;&#34;&#34;)
+                exit(1)
+        if arg == &#34;--pair&#34;:
+            if len(sys.argv) == 2:
+                generate_pair_key()
+                print(&#34;Keys generated&#34;)
+                exit(0)
+            else:
+                print(&#34;&#34;&#34;Error: --pair requires 2 arguments
+    [arguments]: None
+    [example]: python3 main.py --pair
+    [output]: ./public.key and ./private.key&#34;&#34;&#34;)
+                exit(1)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="info1002-TP2.main.binary_to_string"><code class="name flex">
+<span>def <span class="ident">binary_to_string</span></span>(<span>binary: bytes) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>binary_to_string convert a binary string to a string</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>binary</code></strong> :&ensp;<code>bytes</code></dt>
+<dd>binary string to convert</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>string converted</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def binary_to_string(binary: bytes) -&gt; str:
+    &#34;&#34;&#34;
+    binary_to_string convert a binary string to a string
+
+    Args:
+        binary (bytes): binary string to convert
+
+    Returns:
+        str: string converted
+    &#34;&#34;&#34;
+
+    # Split the binary string into 8-bit chunks
+    binTab = [binary[i:i+8] for i in range(0, len(binary), 8)]
+
+    # Convert each 8-bit chunk into a string
+    msg = &#34;&#34;
+    for b in binTab:
+        msg += chr(int(b, 2))
+
+    return msg</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.bytes_to_binary"><code class="name flex">
+<span>def <span class="ident">bytes_to_binary</span></span>(<span>b: bytes) ‑> bytes</span>
+</code></dt>
+<dd>
+<div class="desc"><p>bytes_to_binary convert a bytes to a binary string</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>b</code></strong> :&ensp;<code>bytes</code></dt>
+<dd>bytes to convert</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bytes</code></dt>
+<dd>binary string converted</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bytes_to_binary(b: bytes) -&gt; bytes:
+    &#34;&#34;&#34;
+    bytes_to_binary convert a bytes to a binary string
+
+    Args:
+        b (bytes): bytes to convert
+
+    Returns:
+        bytes: binary string converted
+    &#34;&#34;&#34;
+    tmp = b.hex()
+    return bin(int(tmp, 16))[2:].zfill(8)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.find_message"><code class="name flex">
+<span>def <span class="ident">find_message</span></span>(<span>img: PIL.Image.Image, msg_length: int, y_index: int) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>find_message find the message of size msg_length at (0,y_index) in the image and return it</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong> :&ensp;<code>Image.Image</code></dt>
+<dd>image to search</dd>
+<dt><strong><code>msg_length</code></strong> :&ensp;<code>int</code></dt>
+<dd>size of the message to find</dd>
+<dt><strong><code>y_index</code></strong> :&ensp;<code>int</code></dt>
+<dd>y index of the message to find</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>message found</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_message(img: Image.Image, msg_length: int, y_index: int) -&gt; str:
+    &#34;&#34;&#34;
+    find_message find the message of size msg_length at (0,y_index) in the image and return it
+
+    Args:
+        img (Image.Image): image to search
+        msg_length (int): size of the message to find
+        y_index (int): y index of the message to find
+
+    Returns:
+        str: message found
+    &#34;&#34;&#34;
+    pixels = img.load()
+
+    fullBin = &#34;&#34;
+
+    # Get the lower bits of the red color of each pixel
+    for i in range(msg_length * 8):
+        x = i % img.width
+        y = y_index + (i // img.width) % img.height
+        r, _, _ = pixels[x, y]
+
+        fullBin += str(get_LSB_of_int(r))
+
+    return binary_to_string(fullBin)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.find_message_length"><code class="name flex">
+<span>def <span class="ident">find_message_length</span></span>(<span>img, y_index)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_message_length(img, y_index):
+
+    pixels = img.load()
+
+    msgLengthBin = &#34;&#34;
+
+    # récupère le bit de poids faible de la couleur rouge de chaque pixels
+    for i in range(TAILLE):
+        r, _, _ = pixels[i, y_index]
+        msgLengthBin += str(get_LSB_of_int(r))
+
+    return int(msgLengthBin, 2)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.generate_certificate"><code class="name flex">
+<span>def <span class="ident">generate_certificate</span></span>(<span>name: str, firstname: str, score: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>generate_certificate generate a certificate for the user and save it in the certificate folder. And sign it with the private key in the sign folder.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>name of the user</dd>
+<dt><strong><code>firstname</code></strong> :&ensp;<code>str</code></dt>
+<dd>firstname of the user</dd>
+<dt><strong><code>score</code></strong> :&ensp;<code>int</code></dt>
+<dd>score of the user</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_certificate(name: str, firstname: str, score: int):
+    &#34;&#34;&#34;
+    generate_certificate generate a certificate for the user and save it in the certificate folder. And sign it with the private key in the sign folder.
+
+    Args:
+        name (str): name of the user
+        firstname (str): firstname of the user
+        score (int): score of the user
+    &#34;&#34;&#34;
+    def text(img, text, x, y, text_size, font=&#34;arial&#34;, fill=(0, 0, 0)):
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype(f&#39;fonts/{font}.ttf&#39;, text_size)
+        draw.text((x, y), text, fill, font)
+
+    img = Image.open(&#39;diplome-BG.png&#39;).convert(&#34;RGB&#34;)
+
+    text(img, &#39;UNSC&#39;, 350, 150, 80, fill=(0, 0, 255))
+
+    text(img, f&#39;Spartan&#39;, 380, 270, 50, fill=(0, 128, 0))
+
+    text(img, f&#34;{name.upper()} {firstname.upper()} a réussi la formation de l&#39;UNSC&#34;,
+         200, 375, 30, fill=(0, 0, 0))
+
+    text(img, f&#39;avec une moyenne de {score}&#39;, 325, 425, 30, fill=(0, 0, 0))
+
+    footprint = &#34;UNSC Institute of Reach&#34;
+
+    filename = f&#39;{name}_{firstname}.png&#39;
+
+    img_path = f&#39;certificate/{filename}&#39;
+
+    hide_message(img, firstname, 0)
+    hide_bytes(img, sign_data(firstname.encode(&#39;utf-8&#39;)), 10)
+    hide_message(img, name, 20)
+    hide_bytes(img, sign_data(name.encode(&#39;utf-8&#39;)), 30)
+    hide_message(img, str(score), 40)
+    hide_bytes(img, sign_data(str(score).encode(&#34;utf-8&#34;)), 50)
+    hide_message(img, footprint, 60)
+    hide_bytes(img, sign_data(footprint.encode(&#39;utf-8&#39;)), 70)
+
+    img.save(img_path)
+
+    sign_file(filename)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.generate_pair_key"><code class="name flex">
+<span>def <span class="ident">generate_pair_key</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>generate_pair_key generate a pair of 2048 bit sized keys</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_pair_key():
+    &#34;&#34;&#34;
+    generate_pair_key generate a pair of 2048 bit sized keys
+    &#34;&#34;&#34;
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    out = open(&#34;private.key&#34;, &#34;wb&#34;)
+    out.write(private_key)
+    out.close()
+
+    public_key = key.publickey().export_key()
+    out = open(&#34;public.key&#34;, &#34;wb&#34;)
+    out.write(public_key)
+    out.close()</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.get_LSB_of_int"><code class="name flex">
+<span>def <span class="ident">get_LSB_of_int</span></span>(<span>color: int) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>get_LSB_of_int get low bit of an int</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>color</code></strong> :&ensp;<code>int</code></dt>
+<dd>int to get the low bit</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>lowest bit of the int</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_LSB_of_int(color: int) -&gt; int:
+    &#34;&#34;&#34;
+    get_LSB_of_int get low bit of an int
+
+    Args:
+        color (int): int to get the low bit
+
+    Returns:
+        int: lowest bit of the int
+    &#34;&#34;&#34;
+    return color &amp; 1</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.help"><code class="name flex">
+<span>def <span class="ident">help</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def help():
+    return &#34;&#34;&#34;Usage: python3 main.py [commands] [arguments]
+Commands available :
+--help: print this help
+--generate: generate a certificate for the user and save it in the certificate folder. And sign it with the private key in the sign folder.
+    [arguments]: &lt;name&gt;  &lt;firstname&gt; &lt;score&gt;
+    [example]: python3 main.py --generate &#34;Doe&#34; &#34;John&#34; 20
+    [output]: certificate/John_Doe.png and sign/John_Doe.png
+
+--validate: validate the certificate of the user
+    [arguments]: &lt;filename&gt; of the certificate to validate and the signature of the certificate (&lt;filename&gt;.png.sign). Files are directly in the certificate folder, no needs to add ./certificate.
+    [example]: python3 main.py --validate &#34;John_Doe.png&#34; &#34;John_Doe.png.sign&#34;
+    [output]: True or False
+
+--read: read the message in the picture at the position &lt;position&gt; and print it
+    [arguments]: &lt;filename&gt; of the picture and the position of the message
+    [example]: python3 main.py --read &#34;John_Doe.png&#34; 0
+    [output]: John
+
+--hide-message: hide the message in the picture at the position &lt;position&gt;
+    [arguments]: &lt;filename&gt; of the picture and the position of the message and the message to hide
+    [example]: python3 main.py --hide-message &#34;John_Doe.png&#34; 0 &#34;John&#34;
+    [output]: John_Doe.png
+
+--pair: generate a pair of keys and save them in the folder
+    [arguments]: None
+    [example]: python3 main.py --pair
+    [output]: ./public.key and ./private.key
+
+&#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.hide_binary"><code class="name flex">
+<span>def <span class="ident">hide_binary</span></span>(<span>img: PIL.Image.Image, message: str, binary: bytes, y_index: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>hide_binary hide the binary in the image at (0,y_index)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong> :&ensp;<code>Image.Image</code></dt>
+<dd>image to hide the binary</dd>
+<dt><strong><code>message</code></strong> :&ensp;<code>str</code></dt>
+<dd>used to know the length of the binary</dd>
+<dt><strong><code>binary</code></strong> :&ensp;<code>bytes</code></dt>
+<dd>binary to hide</dd>
+<dt><strong><code>y_index</code></strong> :&ensp;<code>int</code></dt>
+<dd>y index in the image to hide the binary</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hide_binary(img: Image.Image, message: str, binary: bytes, y_index: int):
+    &#34;&#34;&#34;
+    hide_binary hide the binary in the image at (0,y_index)
+
+    Args:
+        img (Image.Image): image to hide the binary
+        message (str): used to know the length of the binary
+        binary (bytes): binary to hide
+        y_index (int): y index in the image to hide the binary
+    &#34;&#34;&#34;
+
+    pixels = img.load()
+
+    msgLengthBin = format(len(message), &#39;016b&#39;)
+
+    # inscrit dans le bit de poids faible du rouge de chaque pixel un bit de notre taille de message
+    for i in range(TAILLE):
+        x = i % img.width
+        y = y_index
+        r, _, _ = pixels[x, y]
+        r = (r &amp; ~1) | int(msgLengthBin[i])
+        pixels[x, y] = r, _, _
+
+    for i in range(len(binary)):
+        x = i % img.width
+        y = y_index + 1 + (i // img.width) % img.height
+        r, _, _ = pixels[x, y]
+        r = (r &amp; ~1) | int(binary[i])
+        pixels[x, y] = r, _, _</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.hide_bytes"><code class="name flex">
+<span>def <span class="ident">hide_bytes</span></span>(<span>img: PIL.Image.Image, b: bytes, y_index: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>hide_bytes hide the bytes in the image at (0,y_index)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong> :&ensp;<code>Image.Image</code></dt>
+<dd>image to hide the bytes</dd>
+<dt><strong><code>b</code></strong> :&ensp;<code>bytes</code></dt>
+<dd>bytes to hide</dd>
+<dt><strong><code>y_index</code></strong> :&ensp;<code>int</code></dt>
+<dd>y index in the image to hide the bytes</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hide_bytes(img: Image.Image, b: bytes, y_index: int):
+    &#34;&#34;&#34;
+    hide_bytes hide the bytes in the image at (0,y_index)
+
+    Args:
+        img (Image.Image): image to hide the bytes
+        b (bytes): bytes to hide
+        y_index (int): y index in the image to hide the bytes
+    &#34;&#34;&#34;
+
+    msgBin = bytes_to_binary(b)
+    hide_binary(img, b, msgBin, y_index)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.hide_message"><code class="name flex">
+<span>def <span class="ident">hide_message</span></span>(<span>img: PIL.Image.Image, message: str, y_index: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>hide_message hide the message in the image at (0,y_index)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong> :&ensp;<code>Image.Image</code></dt>
+<dd>image to hide the message</dd>
+<dt><strong><code>message</code></strong> :&ensp;<code>str</code></dt>
+<dd>message to hide</dd>
+<dt><strong><code>y_index</code></strong> :&ensp;<code>int</code></dt>
+<dd>y index in the image to hide the message</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hide_message(img: Image.Image, message: str, y_index: int):
+    &#34;&#34;&#34;
+    hide_message hide the message in the image at (0,y_index)
+
+    Args:
+        img (Image.Image): image to hide the message
+        message (str): message to hide
+        y_index (int): y index in the image to hide the message
+    &#34;&#34;&#34;
+    msgBin = string_to_binary(message)
+    hide_binary(img, message, msgBin, y_index)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.invert_line"><code class="name flex">
+<span>def <span class="ident">invert_line</span></span>(<span>img: PIL.Image.Image) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>invert_line invert half of the image</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong> :&ensp;<code>Image.Image</code></dt>
+<dd>image to invert</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def invert_line(img: Image.Image) -&gt; None:
+    &#34;&#34;&#34;
+    invert_line invert half of the image
+
+    Args:
+        img (Image.Image): image to invert
+    &#34;&#34;&#34;
+    m = img.height // 2             # milieu de l&#39;image
+    pixels = img.load()             # tableau des pixels
+
+    for y in range(m, img.height):
+        for x in range(0, img.width):
+            # on rÃ©cupÃ¨re les composantes RGB du pixel (x,m)
+            r, g, b = pixels[x, y]
+            r = r ^ 0b11111111      # on les inverse bit Ã  bit avec un XOR
+            g = g ^ 0b11111111      # ...
+            b = b ^ 0b11111111      # ...
+            # on remet les pixels inversÃ©s dans le tableau
+            pixels[x, y] = r, g, b</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.sign_data"><code class="name flex">
+<span>def <span class="ident">sign_data</span></span>(<span>byte_array: bytearray) ‑> bytearray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>sign_data sign the byte_array with the private key</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>byte_array</code></strong> :&ensp;<code>bytearray</code></dt>
+<dd>byte_array to sign</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bytearray</code></dt>
+<dd>signed byte_array</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sign_data(byte_array: bytearray) -&gt; bytearray:
+    &#34;&#34;&#34;
+    sign_data sign the byte_array with the private key
+
+    Args:
+        byte_array (bytearray): byte_array to sign
+
+    Returns:
+        bytearray: signed byte_array
+    &#34;&#34;&#34;
+    private_key_file = open(&#34;private.key&#34;, &#34;r&#34;)
+    private_key = RSA.importKey(private_key_file.read())
+    private_key_file.close()
+
+    signer = PKCS1_v1_5.new(private_key)
+    digest = SHA512.new()
+    digest.update(bytes(byte_array))
+    sig = signer.sign(digest)
+
+    return sig</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.sign_file"><code class="name flex">
+<span>def <span class="ident">sign_file</span></span>(<span>filename: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>sign_file sign the file with the private key</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>file to sign</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sign_file(filename: str):
+    &#34;&#34;&#34;
+    sign_file sign the file with the private key
+
+    Args:
+        filename (str): file to sign
+    &#34;&#34;&#34;
+
+    f = open(f&#34;certificate/{filename}&#34;, &#34;rb&#34;)
+    message = f.read()
+    f.close()
+
+    private_key = open(&#34;private.key&#34;, &#34;r&#34;)
+    private_key = RSA.importKey(private_key.read())
+    f.close()
+
+    signer = PKCS1_v1_5.new(private_key)
+    digest = SHA512.new()
+    digest.update(bytes(message))
+    sig = signer.sign(digest)
+
+    f = open(f&#39;sign/{filename}.sig&#39;, &#34;wb&#34;)
+    f.write(sig)
+    f.close()</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.string_to_binary"><code class="name flex">
+<span>def <span class="ident">string_to_binary</span></span>(<span>string: str) ‑> bytes</span>
+</code></dt>
+<dd>
+<div class="desc"><p>string_to_binary convert a string to a binary string</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>string</code></strong> :&ensp;<code>str</code></dt>
+<dd>string to convert</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bytes</code></dt>
+<dd>binary string converted</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def string_to_binary(string: str) -&gt; bytes:
+    &#34;&#34;&#34;
+    string_to_binary convert a string to a binary string
+
+    Args:
+        string (str): string to convert
+
+    Returns:
+        bytes: binary string converted
+    &#34;&#34;&#34;
+    return &#39;&#39;.join(format(x, &#39;08b&#39;) for x in bytearray(string, &#39;utf-8&#39;))</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.validate_certificate"><code class="name flex">
+<span>def <span class="ident">validate_certificate</span></span>(<span>filename: str, signature: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>validate_certificate validate the certificate of the file</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>file to validate</dd>
+<dt><strong><code>signature</code></strong> :&ensp;<code>str</code></dt>
+<dd>signature of the file</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the certificate is valid, False otherwise</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_certificate(filename: str, signature: str) -&gt; bool:
+    &#34;&#34;&#34;
+    validate_certificate validate the certificate of the file
+
+    Args:
+        filename (str): file to validate
+        signature (str): signature of the file
+
+    Returns:
+        bool: True if the certificate is valid, False otherwise
+    &#34;&#34;&#34;
+    f = open(f&#39;certificate/{filename}&#39;, &#34;rb&#34;)
+    image_bin = f.read()
+    f.close()
+
+    f = open(f&#39;sign/{signature}&#39;, &#34;rb&#34;)
+    sign = f.read()
+    f.close()
+
+    return validate_data(image_bin, sign)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.validate_data"><code class="name flex">
+<span>def <span class="ident">validate_data</span></span>(<span>data: bytearray, signature: bytearray) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>validate_data validate the data with the public key</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>bytearray</code></dt>
+<dd>data to validate</dd>
+<dt><strong><code>signature</code></strong> :&ensp;<code>bytearray</code></dt>
+<dd>signature of the data</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the data is valid, False otherwise</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_data(data: bytearray, signature: bytearray) -&gt; bool:
+    &#34;&#34;&#34;
+    validate_data validate the data with the public key
+
+    Args:
+        data (bytearray): data to validate
+        signature (bytearray): signature of the data
+
+    Returns:
+        bool: True if the data is valid, False otherwise
+    &#34;&#34;&#34;
+    hash = SHA512.new()
+
+    public_key_file = open(&#34;public.key&#34;, &#34;r&#34;)
+    public_key = RSA.importKey(public_key_file.read())
+
+    verifier = PKCS1_v1_5.new(public_key)
+
+    hash.update(data)
+
+    return verifier.verify(hash, signature)</code></pre>
+</details>
+</dd>
+<dt id="info1002-TP2.main.validate_hidden_data"><code class="name flex">
+<span>def <span class="ident">validate_hidden_data</span></span>(<span>filename: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>validate_hidden_data validate the hidden data of the file</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>file to validate</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the hidden data is valid, False otherwise</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_hidden_data(filename: str) -&gt; bool:
+    &#34;&#34;&#34;
+    validate_hidden_data validate the hidden data of the file
+
+    Args:
+        filename (str): file to validate
+
+    Returns:
+        bool: True if the hidden data is valid, False otherwise
+    &#34;&#34;&#34;
+
+    filename = f&#39;certificate/{filename}&#39;
+
+    img = Image.open(filename)
+
+    msgLength = find_message_length(img, 0)
+    firstname_plain = find_message(img, msgLength, 1)
+
+    msgLength = find_message_length(img, 10)
+    firstname_sign = find_message(img, msgLength, 11)
+
+    firstname_valid = validate_data(firstname_plain.encode(
+        &#34;utf-8&#34;), firstname_sign.encode(&#34;utf-8&#34;))
+
+    if firstname_valid:
+        print(&#34;firstname valid&#34;)
+    else:
+        print(&#34;firstname invalid&#34;)
+
+    msgLength = find_message_length(img, 20)
+    name_plain = find_message(img, msgLength, 21)
+
+    msgLength = find_message_length(img, 30)
+    name_sign = find_message(img, msgLength, 31)
+
+    name_valid = validate_data(name_plain.encode(
+        &#34;utf-8&#34;), name_sign.encode(&#34;utf-8&#34;))
+
+    if name_valid:
+        print(&#34;name valid&#34;)
+    else:
+        print(&#34;name invalid&#34;)
+
+    msgLength = find_message_length(img, 40)
+    score_plain = find_message(img, msgLength, 41)
+
+    msgLength = find_message_length(img, 50)
+    score_sign = find_message(img, msgLength, 51)
+
+    score_valid = validate_data(score_plain.encode(
+        &#34;utf-8&#34;), score_sign.encode(&#34;utf-8&#34;))
+
+    if score_valid:
+        print(&#34;score valid&#34;)
+    else:
+        print(&#34;score invalid&#34;)
+
+    msgLength = find_message_length(img, 60)
+    university_footprint = find_message(img, msgLength, 61)
+
+    msgLength = find_message_length(img, 70)
+    university_footprint_sign = find_message(img, msgLength, 71)
+
+    university_footprint_valid = validate_data(
+        university_footprint.encode(&#34;utf-8&#34;), university_footprint_sign.encode(&#34;utf-8&#34;))
+
+    if university_footprint_valid:
+        print(&#34;university footprint valid&#34;)
+    else:
+        print(&#34;university footprint invalid&#34;)
+
+    return firstname_valid and name_valid and score_valid and university_footprint_valid</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="info1002-TP2" href="index.html">info1002-TP2</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="info1002-TP2.main.binary_to_string" href="#info1002-TP2.main.binary_to_string">binary_to_string</a></code></li>
+<li><code><a title="info1002-TP2.main.bytes_to_binary" href="#info1002-TP2.main.bytes_to_binary">bytes_to_binary</a></code></li>
+<li><code><a title="info1002-TP2.main.find_message" href="#info1002-TP2.main.find_message">find_message</a></code></li>
+<li><code><a title="info1002-TP2.main.find_message_length" href="#info1002-TP2.main.find_message_length">find_message_length</a></code></li>
+<li><code><a title="info1002-TP2.main.generate_certificate" href="#info1002-TP2.main.generate_certificate">generate_certificate</a></code></li>
+<li><code><a title="info1002-TP2.main.generate_pair_key" href="#info1002-TP2.main.generate_pair_key">generate_pair_key</a></code></li>
+<li><code><a title="info1002-TP2.main.get_LSB_of_int" href="#info1002-TP2.main.get_LSB_of_int">get_LSB_of_int</a></code></li>
+<li><code><a title="info1002-TP2.main.help" href="#info1002-TP2.main.help">help</a></code></li>
+<li><code><a title="info1002-TP2.main.hide_binary" href="#info1002-TP2.main.hide_binary">hide_binary</a></code></li>
+<li><code><a title="info1002-TP2.main.hide_bytes" href="#info1002-TP2.main.hide_bytes">hide_bytes</a></code></li>
+<li><code><a title="info1002-TP2.main.hide_message" href="#info1002-TP2.main.hide_message">hide_message</a></code></li>
+<li><code><a title="info1002-TP2.main.invert_line" href="#info1002-TP2.main.invert_line">invert_line</a></code></li>
+<li><code><a title="info1002-TP2.main.sign_data" href="#info1002-TP2.main.sign_data">sign_data</a></code></li>
+<li><code><a title="info1002-TP2.main.sign_file" href="#info1002-TP2.main.sign_file">sign_file</a></code></li>
+<li><code><a title="info1002-TP2.main.string_to_binary" href="#info1002-TP2.main.string_to_binary">string_to_binary</a></code></li>
+<li><code><a title="info1002-TP2.main.validate_certificate" href="#info1002-TP2.main.validate_certificate">validate_certificate</a></code></li>
+<li><code><a title="info1002-TP2.main.validate_data" href="#info1002-TP2.main.validate_data">validate_data</a></code></li>
+<li><code><a title="info1002-TP2.main.validate_hidden_data" href="#info1002-TP2.main.validate_hidden_data">validate_hidden_data</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
