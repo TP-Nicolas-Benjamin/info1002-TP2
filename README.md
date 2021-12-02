@@ -8,6 +8,9 @@ Benjamin Verdant
 
 [Sujet du TP](https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/2122/info002/tp2.html)
 
+Run before anythign else `pip install -r requirements.txt`
+
+
 Toutes les questions jusqu'à la 5 ont été traités.
 
 Les commandes pour les tests sont les suivantes :
